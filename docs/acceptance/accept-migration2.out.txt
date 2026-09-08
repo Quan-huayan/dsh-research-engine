@@ -1,0 +1,12 @@
+﻿报告已写入 `D:\CCNI\expHarness\accept-migration2.report.md`（14,509 B）。
+
+1. **R1 通过** — migrate 幂等修复：12 个既有 run 补证据清单、9 条实体补来源、台账第 46 行。
+2. **R2 全通过** — verify **clean**；12 run；9 实体全部带来源（无「缺」）；笔记 4 生效 / 4 待裁决，标题与内容逐条核对一致。
+3. **R3 通过** — `method-variant-map`、`run-log-locations`、`six-variants-naming` 均按证据 accept（台账 48–50）；生效结论 4→**7**，待裁决 4→**1**。
+4. **R3b** — `dataset-cifar100` 的 `evidence: []` 为空，无证据指针 → 只能停在 proposed，未强行 accept（正文所述 junction 实测为真，但缺的是证据登记）。
+5. **R4 通过** — report(12 条) / notes-skill(1 条) / index(8 条) 全部渲染，SKILL.md 全文已贴。
+6. **R5 未完成（环境阻塞，非迁移缺陷）** — runId `attndepth-smoke-diag-20260908-112714-e4d`，job `research.run-1` 以 **exit 1 failed** 收场：`PermissionError [Errno 13]` 写 `raw/smoke.log`。根因是本会话可写根为 `D:\CCNI\expHarness`，工程在其外；`python --version` 在同 cwd 下 exit 0、独立写探针 `UnauthorizedAccessException`，证明“进程能跑、写被拒”；审批已禁用故不绕行。引擎侧状态机/产出登记/manifest(complete=true) 均正常，历史上同模板在可写会话曾 done/exit 0。
+7. **R6 全通过** — 终检 **clean**；pth 32/32、png 40/40、txt 12/12、ipynb 4/4、notes 8/8 均未减少，`registry.jsonl` 36→**58** 行；根 `.git` 仍为 **False**。
+8. **零删除**，未用 write/edit/pwsh 改受管文件，未启动训练脚本。
+9. 另记 3 个观察项：notes-skill 条目数(1) 与生效结论(7) 不一致（疑似仅收 claim 的设计）、`project.yaml` 遗留 txt 计数漂移（声明 11/4 vs 实测 12/0，非本轮引入）、无生效约定。
+10. 待你决策：① 是否扩大会话可写根以补做 R5 端到端冒烟；② 是否给 `dataset-cifar100` 补证据后裁决；③ notes-skill 是否应纳入 lesson/已接受 proposal。

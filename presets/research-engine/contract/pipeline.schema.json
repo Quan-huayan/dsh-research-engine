@@ -1,0 +1,43 @@
+{
+  "$id": "https://research-engine.local/contract/pipeline.schema.json",
+  "title": "pipeline.yaml —— 环境：阶段机",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "graphVersion", "stages", "edges"],
+  "properties": {
+    "schemaVersion": { "type": "integer", "const": 3 },
+    "graphVersion": { "type": "integer", "minimum": 1, "description": "阶段机版本；每次变更递增，run 冻结时抄录。" },
+    "entry": { "type": ["string", "null"], "description": "入口阶段 id；可为 null（图未设入口）。" },
+    "stages": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/stage" }
+    },
+    "edges": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/edge" }
+    }
+  },
+  "$defs": {
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[a-z0-9_-]*[a-z0-9])?$" },
+        "name": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "deprecated"] },
+        "replacedBy": { "type": "string", "description": "改名后的新 id（旧 id 只 deprecated，永不删除）。" }
+      }
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "string" },
+        "to": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

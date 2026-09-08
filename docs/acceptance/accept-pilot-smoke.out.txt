@@ -1,0 +1,8 @@
+﻿**摘要（S1/S2 全部执行完毕）**
+
+1. S1a→S1f 全跑通：runId `attndepth-smoke-diag-20260908-112907-35e`，`run_launch` 退出码 0，`run_query` 显示 done/产出 3（raw 2），`run_observe` 取到 `python_version = 3.13.5`（`raw/smoke.log:2`），pwsh 证实 `raw/smoke.log` 存在（727 B / 11 行，尾行 `smoke ok`）。
+2. **唯一偏差 S1c**：`job_output(job_id="research.run-1")` 两次（含 `wait:true`）均返回 `(no new output)`；日志实际在已登记产出 `raw/stdout.log`、`raw/smoke.log` 中，run 本身健康。
+3. S2a/S2c 两次 `project_verify scope=all` 均 **clean**；S2b `view_render report` 生成 `_report/runs.csv`+`summary.json`（14 条，待裁决 1）。
+4. **落盘受阻**：`write` 到 `D:\CCNI\expHarness\accept-pilot-smoke.report.md` 被沙箱拒绝（workspace-write 仅允许 `D:\AI\attndepth`；本会话禁用审批，不能提权）。
+5. 报告已写入可写副本：`D:\AI\attndepth\accept-pilot-smoke.report.md`（5937 B / 68 行，含验收表 + 异常段），请人工移动到 `D:\CCNI\expHarness\`。
+6. 硬约束遵守：未启动训练脚本；未用 write/edit/pwsh 改受管文件；副本落地后复检仍 clean。

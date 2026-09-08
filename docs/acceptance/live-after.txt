@@ -1,0 +1,41 @@
+=== snapshot 2026-09-08T17:18:18.3452067+08:00 ===
+AF51B8F5E8ECFF091AA090F33B054F357F271235AA5E72D184B33DB7D89859C5  project.yaml  (5783 bytes)
+0E2C70022C82DA6F595D4336BE42C9B09628B38EA5A5BE8C169FD5A2A68DFE61  registry.jsonl  (6785 bytes)
+29F2DCA7C10EC9C74C590C006D37761E82FF1610C0C8436FEE8B78298DA36718  .kb\index.yaml  (2175 bytes)
+53C8FEF7D599A4845D60E7BFE85A69E676453578293DCF88620F23ECD124263A  _report\runs.csv  (696 bytes)
+BE189D238968D9433E1D4F89EF572E785A412F9AFA26878E427AAC0687E5DEE2  _report\summary.json  (1729 bytes)
+--- .kb/notes ---
+FB588CC2E7AA4507E508BD08B01203CBF34A20A3B197C14907639E5344544017  .kb/notes/conclusion-parameter-parity.md
+4235112B3F627C4E41D501ABE748331AD19DA15E17AB02A80C512BE0E997EBC0  .kb/notes/dataset-cifar100.md
+972026BDE607355639993473F78584C57639D14CDCE18EE5D566CF33706E9278  .kb/notes/lesson-attndepth-danger-prefix-20260908-091659-10f.md
+0078C10D6C4EC83E3BFE1A016335C6698684287F69FA61C004AE906ABFD840FA  .kb/notes/lesson-sandbox-127-fixed-v4.md
+E964FD0DC2A6B0162D207218E402ED5517D1C56A16D83D5BB9AB29325A9B24BA  .kb/notes/lesson-smoke-hello-seed-placeholder.md
+A97E3307C1C28AEF7D2FF7314576F041515545CB6566BC16A7E7B2A801F8EC44  .kb/notes/method-variant-map.md
+B85956CAEBF72BF7AFC8C1FF5BADF496100B7F80037CB1E77C93E7E2D60881D1  .kb/notes/run-log-locations.md
+DF2E59A9705D7DBF3BC18E10D3B946C4F383B5C5B256CF641C1B5070C1FCD393  .kb/notes/six-variants-naming.md
+--- experiments dirs ---
+attndepth-cifar100-main-20260907-172705-4c8
+attndepth-danger-outside-20260908-091701-c2e
+attndepth-danger-prefix-20260908-091659-10f
+attndepth-diag-probe-20260908-084604-7ca
+attndepth-hold-probe-20260908-091633-2a4
+attndepth-smoke-diag-20260908-084534-d01
+attndepth-smoke-diag-20260908-091237-18a
+attndepth-smoke-diag-20260908-091258-238
+attndepth-smoke-hello-20260908-084424-59a
+attndepth-smoke-hello-20260908-085835-649
+attndepth-smoke-hello-20260908-085840-686
+attndepth-smoke-hello-20260908-090151-ba5
+--- registry run rows ---
+attndepth-cifar100-main-20260907-172705-4c8  draft  
+attndepth-smoke-hello-20260908-084424-59a  failed  exit code: 127
+attndepth-smoke-diag-20260908-084534-d01  failed  exit code: 127
+attndepth-diag-probe-20260908-084604-7ca  failed  exit code: 127
+attndepth-smoke-hello-20260908-085835-649  failed  exit code: 1
+attndepth-smoke-hello-20260908-085840-686  done  exit code: 0
+attndepth-smoke-hello-20260908-090151-ba5  draft  
+attndepth-smoke-diag-20260908-091237-18a  failed  exit code: 1
+attndepth-smoke-diag-20260908-091258-238  done  exit code: 0
+attndepth-hold-probe-20260908-091633-2a4  failed  exit code: 1
+attndepth-danger-prefix-20260908-091659-10f  draft  
+attndepth-danger-outside-20260908-091701-c2e  draft  

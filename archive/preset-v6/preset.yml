@@ -1,0 +1,3 @@
+name: 研究引擎
+description: 研究引擎（research-engine）：exp-ledger/stage-ctrl/task-dispatch/kb-core 四插件 + research.* 外观路由；接新工程只需 project.yaml + 领域 SKILL.md，零插件代码。
+order: 10

@@ -1,0 +1,13 @@
+﻿验收执行完毕，报告已写入 `D:\CCNI\expHarness\accept-isolation.report.md`（10,456 字节）。
+
+**摘要（≤10 行）**
+1. 隔离判定 **通过（§6.2-J）**：A/B/D 全通过，E1–E4 全通过。
+2. E1 HEAD 前后逐字一致：`bc2bf0991d4c7562b5046de2e75457753e4deb94`。
+3. E2 三个已跟踪文件 blob 哈希与基线逐一相同；` M src/train.py` 是**基线既有**的未提交改动（哈希未变、mtime 早于探针）；无 ` D`/`R `。
+4. E3 根 `.git` 是用户原有的（基线即存在），引擎版本库落在 `.research/engine.git`，未新建 `.git`。
+5. E4 用户 `.gitignore` 基线不存在→现仍不存在；`.git/config`、`.git/HEAD`、`.git/info/exclude`、hooks 均与基线一致；用户 `.git` 内无任何文件在探针开始后被写入。
+6. 引擎产物（`.kb/ .research/ _report/ experiments/ pipeline.yaml project.yaml registry.jsonl scripts/ skills/ templates.yaml`）全部为 `??` 未跟踪项。
+7. **唯一失败项 C4** `run_observe`：「清单里没有角色为 stdout 的产出文件」。
+8. C4 根因（有证据）：脚本 `print` 不写 `--out` 文件→`raw/` 为空；且引擎把进程产出登记为 `role=log`（同工作区他例可证），模板却声明 `role=stdout`；正则亦无捕获组。
+9. 该失败属夹具/观察契约不一致，**非隔离问题**（C2/C3 已证明执行与登记链路正常，退出码 0）。
+10. 全程未执行 `git commit/add/checkout/stash/reset`，未修改用户已跟踪文件，未删除任何文件。

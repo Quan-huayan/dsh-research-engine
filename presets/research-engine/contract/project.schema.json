@@ -1,0 +1,66 @@
+{
+  "$id": "https://research-engine.local/contract/project.schema.json",
+  "title": "project.yaml —— 环境：身份 / 受管区 / legacy 声明 / 约定",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "project", "managed", "conventions"],
+  "properties": {
+    "schemaVersion": { "type": "integer", "const": 3 },
+    "project": { "$ref": "#/$defs/identity" },
+    "managed": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "受管区白名单（相对工程根的 pathspec）；只有这些路径进版本库，也只有这些路径的越权改动会被判 dirty。"
+    },
+    "conventions": {
+      "type": "array",
+      "items": { "$ref": "https://research-engine.local/contract/conventions.schema.json#/$defs/convention" },
+      "description": "用户权威声明；每条必须带 decision 引用。"
+    },
+    "vocabulary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "entityKinds": { "type": "array", "items": { "type": "string" } },
+        "noteKinds": { "type": "array", "items": { "type": "string" } },
+        "observableRoles": { "type": "array", "items": { "type": "string" } }
+      },
+      "description": "开放词汇表（迁移自旧 kb.types / 实体类别）。"
+    },
+    "legacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "note": { "type": "string" },
+        "keep": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["pattern", "count"],
+            "properties": {
+              "pattern": { "type": "string" },
+              "count": { "type": "integer" }
+            }
+          }
+        },
+        "protectedAreas": { "type": "array", "items": { "type": "string" } }
+      },
+      "description": "遗留区：只登记 size/mtime，不改不删不哈希。"
+    }
+  },
+  "$defs": {
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "name": { "type": "string", "minLength": 1 },
+        "domain": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    }
+  }
+}

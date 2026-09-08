@@ -1,0 +1,33 @@
+{
+  "$id": "https://research-engine.local/contract/manifest.schema.json",
+  "title": "experiments/<runId>/manifest.json —— 证据清单",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "runId", "entries"],
+  "properties": {
+    "schemaVersion": { "type": "integer", "const": 3 },
+    "runId": { "type": "string", "minLength": 1 },
+    "entries": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/entry" }
+    },
+    "complete": { "type": "boolean", "description": "false = 证据不完整（存在未登记产出），不得据此下结论。" },
+    "updatedAt": { "type": "string" }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "role", "sha256", "bytes", "producer", "ts"],
+      "properties": {
+        "path": { "type": "string", "description": "工程内相对路径。" },
+        "role": { "type": "string", "description": "证据角色（config / log / stdout / result / checkpoint / figure / other）。" },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "bytes": { "type": "integer", "minimum": 0 },
+        "producer": { "type": "string", "description": "产生者：工具名或进程。" },
+        "ts": { "type": "string", "minLength": 1 },
+        "stored": { "type": "string", "enum": ["versioned", "hash-only"], "description": "versioned = 已随版本库存档；hash-only = 仅记录哈希（版本库不可用或未启用）。" }
+      }
+    }
+  }
+}

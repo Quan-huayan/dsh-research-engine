@@ -1,0 +1,56 @@
+{
+  "$id": "https://research-engine.local/contract/note.schema.json",
+  "title": ".kb/notes/<name>.md —— frontmatter：提议 / 结论 / 教训 / 问题",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "name", "kind", "status", "authority", "description", "evidence", "createdAt", "updatedAt"],
+  "properties": {
+    "schemaVersion": { "type": "integer", "const": 3 },
+    "name": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "kind": { "type": "string", "enum": ["proposal", "claim", "lesson", "question"] },
+    "status": { "type": "string", "enum": ["proposed", "accepted", "superseded", "retracted"] },
+    "authority": { "type": "string", "enum": ["agent", "user", "evidence"] },
+    "description": { "type": "string", "minLength": 1 },
+    "evidence": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/pointer" },
+      "description": "证据指针；claim 必填且必须可解析。"
+    },
+    "scope": { "type": "string", "description": "成立条件 / 适用范围。" },
+    "decidedBy": { "$ref": "#/$defs/decision" },
+    "supersedes": { "type": "array", "items": { "type": "string" } },
+    "supersededBy": { "type": "string" },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "stage": { "type": "string" },
+    "createdAt": { "type": "string", "minLength": 1 },
+    "updatedAt": { "type": "string", "minLength": 1 },
+    "legacy": { "type": "object", "description": "迁移前的原始 frontmatter 字段（保留不丢）。" }
+  },
+  "$defs": {
+    "pointer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "ref"],
+      "properties": {
+        "type": { "type": "string", "enum": ["run", "file", "observation"] },
+        "ref": { "type": "string", "minLength": 1, "description": "runId / 工程内相对路径（可带 :行） / runId#field。" },
+        "note": { "type": "string" }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["askCallId", "answer", "sessionId", "ts"],
+      "properties": {
+        "askCallId": { "type": "string" },
+        "question": { "type": "string" },
+        "answer": { "type": "string" },
+        "selected": { "type": "array", "items": { "type": "string" } },
+        "custom": { "type": "string" },
+        "sessionId": { "type": "string" },
+        "ts": { "type": "string" },
+        "attested": { "type": "boolean" }
+      }
+    }
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:research-engine:contract/project.schema.json",
+  "title": "research-engine project contract",
+  "description": "研究引擎共享契约：描述『一个研究工程怎么写』。结构（骨架）由本 schema 管，内容开放（stages/entities/templates/kb.types/extends 的值可自由扩展）。project_load 用本文件校验工程 yaml 的骨架；registry.jsonl 的 entity/run 记录规范化参照 $defs。不自建自再生 schema 的运行时。",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["project", "kb", "entities", "stages", "pipeline", "templates", "legacy"],
+  "properties": {
+    "project": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$", "description": "工程 id（建议 kebab-case，与工程目录同名）" },
+        "name": { "type": "string" },
+        "domain": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "kb": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "知识库槽位：types 是 kb-core 策展笔记的类型白名单（内容开放，多来源合并时的唯一性由插件校验）",
+      "required": ["types"],
+      "properties": {
+        "types": { "type": "array", "items": { "type": "string" }, "uniqueItems": false }
+      }
+    },
+    "entities": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/entityEntry" }
+    },
+    "stages": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/stage" }
+    },
+    "pipeline": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "非线性阶段图：entry 是入口阶段（可空 = 尚未建图）；edges 中 from/to 引用 stages[].id，唯一性/可达性由 stage-ctrl 校验",
+      "required": ["entry", "edges"],
+      "properties": {
+        "entry": { "type": ["string", "null"] },
+        "edges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": ["from", "to"],
+            "properties": {
+              "from": { "type": "string" },
+              "to": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "templates": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/template" },
+      "description": "任务模板表（task-dispatch）。模板内容开放，仅骨架受检"
+    },
+    "legacy": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "旧产物登记：keep+record，只声明不删除（exp-ledger project_init 对杂乱旧目录写入）"
+    }
+  },
+  "$defs": {
+    "stage": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" },
+        "name": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "entityEntry": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "实体清单条目：id 唯一；extends 可引用 kb.types 或任意外部类型（内容开放）",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string" },
+        "kind": { "type": "string" },
+        "name": { "type": "string" },
+        "extends": {
+          "anyOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" } }
+          ]
+        },
+        "props": { "type": "object" }
+      }
+    },
+    "template": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "任务模板：parameters 是参数槽（开放 JSON schema 片段）；command.allow 是安全闸命令前缀白名单；command.script 为工程内可执行文件相对路径（可空）",
+      "required": ["description", "command"],
+      "properties": {
+        "description": { "type": "string" },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "type": { "const": "object" },
+            "properties": { "type": "object" },
+            "required": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "command": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["allow"],
+          "properties": {
+            "allow": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "允许的命令前缀白名单，例如 [\"python\", \"python3\"]；run_launch 安全闸据此拦截"
+            },
+            "script": { "type": "string" },
+            "args": { "type": "string" }
+          }
+        }
+      }
+    },
+    "entityRecord": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "registry.jsonl 实体行（exp-ledger entity_write 写出/规范化）",
+      "required": ["record", "id", "kind", "ts"],
+      "properties": {
+        "record": { "const": "entity" },
+        "id": { "type": "string" },
+        "kind": { "type": "string" },
+        "name": { "type": "string" },
+        "extends": {
+          "anyOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" } }
+          ]
+        },
+        "props": { "type": "object" },
+        "ts": { "type": "string" }
+      }
+    },
+    "runRecord": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "registry.jsonl 运行行（task-dispatch draft/launch 登记；kb-core report 聚合读它）",
+      "required": ["record", "runId", "kind", "stage", "template", "params", "status", "ts"],
+      "properties": {
+        "record": { "const": "run" },
+        "runId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" },
+        "kind": { "type": "string", "description": "运行类别，如 train / eval / compare / smoke" },
+        "stage": { "type": "string" },
+        "template": { "type": "string" },
+        "params": { "type": "object" },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "queued", "running", "done", "failed", "cancelled", "invalidated"]
+        },
+        "configPath": { "type": ["string", "null"] },
+        "resultPath": { "type": ["string", "null"] },
+        "ts": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+# research-engine 工程骨架模板（共享契约的写法示范）
+# exp-ledger `project_init` 为新工程按本模板生成 project.yaml；
+# 结构由 contract/project.schema.json 校验，内容开放——stages/pipeline.edges/
+# templates/kb.types/extends 的取值可自由扩展，唯一性与图合法性由各插件在载入时校验。
+# 换工程 = 写一个这样的 yaml（+ 领域 SKILL.md），零插件代码。
+
+project:
+  id: new-project             # 建议 kebab-case，与工程目录同名（project_init 生成时会替换）
+  name: 新研究工程
+  domain: ""                  # 领域关键词，供 kb 检索
+  description: ""
+
+# ── 知识库槽位（kb-core）────────────────────────────────────────────
+# types：策展笔记的类型白名单；kb_use_learn 写的笔记 type 应在其中（内容开放）
+kb:
+  types: []
+
+# ── 实体清单（exp-ledger）───────────────────────────────────────────
+# 每条 = 被登记/追踪的对象（数据集、模型、产物…）；extends 可引用 kb.types 或任意外部类型
+entities: []
+
+# ── 非线性阶段图（stage-ctrl）──────────────────────────────────────
+# 阶段骨架可空：新工程从 [] 起步，用 stage_define 逐步加阶段/边。
+# 载入校验规则：阶段 id 唯一；入口歧义/不可达/孤立出边 → 拒绝
+stages: []
+pipeline:
+  entry: null                  # 入口阶段 id（建图后填）
+  edges: []                    # - {from: <stage.id>, to: <stage.id>}
+
+# ── 任务模板表（task-dispatch）─────────────────────────────────────
+# 每个模板 = {description, parameters(参数槽), command:{allow 白名单, script?, args?}}
+# run_launch 的安全闸：脚本必须在工程内、命令前缀命中 allow、不写工程外
+templates: {}
+
+# ── legacy 登记（exp-ledger project_init 对杂乱旧目录写入）─────────
+# keep+record：只登记指向，绝不删除旧 .pth/.png/.txt/.ipynb 等产物
+legacy:
+  keep:
+    - pattern: "**/*.pth"
+      note: "旧权重：登记不删"
+    - pattern: "**/*.png"
+      note: "旧图：登记不删"
+    - pattern: "**/*.txt"
+      note: "旧日志/输出：登记不删"
+    - pattern: "**/*.ipynb"
+      note: "旧笔记本：登记不删"

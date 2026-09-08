@@ -1,0 +1,12 @@
+﻿验收执行完毕，报告已写入 `D:\CCNI\expHarness\accept-happy-path.report.md`。
+
+1. A 接入：init 成功（版本能力可用、空目录 0 遗留）→ load 显示未声明 → verify **clean + 3 条待声明**。
+2. B 阶段机：3 阶段 2 边、入口 dataset、图版本 6，`stage_goto` 推进 dataset→train 成功。
+3. C/D：脚本 `smoke-check` 声明（指纹 37db8c5f…，白名单 python），模板 `smoke-check@v1` 可提取 `val_acc[log]`。
+4. E 执行：runId `scratch2-smoke-check-20260908-110939-12a`，后台 `research.run-1` 退出码 0；`run_observe` 得 `val_acc = 42.5 %`（smoke.log:5），pwsh 证实文件存在（71 字节）。
+5. F 用户权威：askCallId `call_00_y6NHba1IpEazKhn5HAVN7932`，用户答「必须 <10%」；约定生效并带裁决引文；**F2b（<5%）按预期被拒**（「答复里的硬约束没有体现：10%」）。
+6. G 知识：claim 写入 proposed → 依证据 accept；**G4 无证据 claim 按预期被拒**。
+7. H 视图：report/notes-skill/index 三视图渲染成功，summary.json 与 SKILL.md 已全文打印。
+8. 结果：**32/32 通过**（含 2 项「预期被拒」实际被拒）。
+9. 观察到 7 处细节差异（图版本从 2 起算、ask 返回 JSON 与台账渲染串形态不同、视图条目数口径、report 额外产出 runs.csv、torch 环境告警等），详见报告第 2 节。
+10. 文件：仅新增引擎工具产出的工程文件 + 本报告，**未修改受禁文件、未删除任何内容**。

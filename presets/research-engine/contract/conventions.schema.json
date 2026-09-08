@@ -1,0 +1,41 @@
+{
+  "$id": "https://research-engine.local/contract/conventions.schema.json",
+  "title": "convention —— 用户权威（必须带 decision 引用）",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion"],
+  "properties": { "schemaVersion": { "type": "integer", "const": 3 } },
+  "$defs": {
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["askCallId", "answer", "sessionId", "ts"],
+      "properties": {
+        "askCallId": { "type": "string", "minLength": 1, "description": "用户答复所对应的提问调用标识。" },
+        "question": { "type": "string", "description": "提问原文。" },
+        "answer": { "type": "string", "minLength": 1, "description": "用户答复原文（工具拷贝，不是模型转述）。" },
+        "selected": { "type": "array", "items": { "type": "string" } },
+        "custom": { "type": "string", "description": "用户补充说明原文（若有）。" },
+        "sessionId": { "type": "string", "minLength": 1 },
+        "ts": { "type": "string", "minLength": 1 },
+        "attested": { "type": "boolean", "description": "true = 原文在案但无法回源（会话日志缺失）。" }
+      }
+    },
+    "convention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "statement", "authority", "status", "source", "decision", "createdAt"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "statement": { "type": "string", "minLength": 1 },
+        "scope": { "type": "string", "description": "生效范围；缺省 = 全工程。" },
+        "authority": { "type": "string", "const": "user" },
+        "status": { "type": "string", "enum": ["active", "deprecated"] },
+        "source": { "type": "string", "minLength": 1, "description": "依据来源（文件:行 / runId / 实测命令）。" },
+        "decision": { "$ref": "#/$defs/decision" },
+        "createdAt": { "type": "string", "minLength": 1 },
+        "deprecatedAt": { "type": "string" }
+      }
+    }
+  }
+}

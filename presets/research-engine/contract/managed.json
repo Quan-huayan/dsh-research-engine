@@ -1,0 +1,36 @@
+{
+  "version": 3,
+  "note": "受管白名单的唯一定义。project.yaml.managed 必须与此一致；工具写入前用它判定守卫范围。",
+  "managed": [
+    "project.yaml",
+    "pipeline.yaml",
+    "templates.yaml",
+    "registry.jsonl",
+    "scripts/**",
+    ".kb/**",
+    "skills/*/SKILL.md",
+    "_report/**",
+    ".research/state.json",
+    ".research/managed.json",
+    ".research/ignored.json",
+    "experiments/*/config.json",
+    "experiments/*/manifest.json",
+    "experiments/*/observations.json"
+  ],
+  "processWritable": [
+    "experiments/*/raw/**"
+  ],
+  "versionedRaw": [
+    "experiments/*/raw/**"
+  ],
+  "never": {
+    "note": "遗留区与用户数据：只登记，不改、不删、不入版本库。",
+    "extensions": [".pth", ".png", ".txt", ".txt~", ".ipynb", ".zip", ".bin", ".npz", ".pt", ".csv"],
+    "areas": ["data", "history", "x", "x1", "x2"]
+  },
+  "reservedPlaceholders": {
+    "__raw__": "experiments/<runId>/raw（本次 run 的原始产出目录，工程内相对路径）",
+    "__runId__": "本次 runId",
+    "__project__": "工程根（绝对路径）"
+  }
+}

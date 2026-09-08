@@ -1,0 +1,9 @@
+# 本地测试产物与探针工程（可由 tools/probe-*.mjs 重新生成，不进包、不进仓库）
+fixtures/
+
+# 依赖与打包产物
+node_modules/
+*.tgz
+
+# 临时文件
+.tmp-*

@@ -1,0 +1,32 @@
+# @quan-huayan/dsh-research-engine 的组合包层（bundle patch）。
+#
+# 安装后 `dsh plugin --profile web add @quan-huayan/dsh-research-engine` 会把本行加入
+# profile 的 dsh.profile.bundles，本层在启动时按下面的顺序生效：
+#
+#   1) insert：把本包的提供方行挂进 profile（它只暴露 presetsDir 这个服务）；
+#   2) id 定向补丁：让 agent-presets 注入该服务，并把本包自带的 presets/ 注册成
+#      一个 system 根 —— 新会话即可在 preset 选择器里看到「研究引擎」。
+#
+# 两点说明：
+#   * 行名用包名（Node 从 profile 的 node_modules 解析到已安装代码），不用相对路径；
+#   * 路径走 !!js 求值，取的是本包自己的绝对路径，与 cwd / baseUrl 无关。
+#   * 补丁按 id 整体替换 config：如果你的 profile 自己也配置了 agent-presets 的 config，
+#     你的层在本层之后应用，会整体覆盖 —— 那时请把下面的 roots 一并重述。
+#
+# 兼容性：DSH >= 0.1.2-rc.1 时 agent-presets 的 roots 由本层决定；
+# DSH 0.1.1-rc.x 的启动器会把 roots 覆写为「仅随附根」，本层不生效 ——
+# 那种版本请改用 `node node_modules/@quan-huayan/dsh-research-engine/scripts/install.mjs`
+# 把 preset 装进 $DSH_HOME/.agent-presets/（用户根）。
+
+- insert:
+    - id: research-engine-bundle
+      name: '@quan-huayan/dsh-research-engine/startup'
+
+- id: agent-presets
+  inject: [researchEngineBundle]
+  config:
+    default: standard
+    includeUserRoot: true
+    roots:
+      - path: !!js ctx.researchEngineBundle.presetsDir
+        trust: system

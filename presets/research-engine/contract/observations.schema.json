@@ -1,0 +1,46 @@
+{
+  "$id": "https://research-engine.local/contract/observations.schema.json",
+  "title": "experiments/<runId>/observations.json —— 证据权威（工具提取值）",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "runId", "observations"],
+  "properties": {
+    "schemaVersion": { "type": "integer", "const": 3 },
+    "runId": { "type": "string", "minLength": 1 },
+    "observations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/observation" }
+    },
+    "updatedAt": { "type": "string" }
+  },
+  "$defs": {
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "value", "file", "line", "sha256", "extractedAt"],
+      "properties": {
+        "field": { "type": "string" },
+        "value": { "type": ["number", "string"] },
+        "unit": { "type": "string" },
+        "file": { "type": "string", "description": "来源文件（工程内相对路径）。" },
+        "line": { "type": "integer", "minimum": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "提取时来源文件的哈希。" },
+        "extractedAt": { "type": "string", "minLength": 1 },
+        "compareTo": { "$ref": "#/$defs/comparison" }
+      }
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runId", "verdict"],
+      "properties": {
+        "runId": { "type": "string" },
+        "verdict": { "type": "string", "enum": ["match", "mismatch", "missing"] },
+        "otherValue": { "type": ["number", "string", "null"] },
+        "delta": { "type": ["number", "null"] },
+        "deltaPct": { "type": ["number", "null"] },
+        "tolerancePct": { "type": ["number", "null"] }
+      }
+    }
+  }
+}

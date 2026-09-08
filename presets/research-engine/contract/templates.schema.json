@@ -1,0 +1,78 @@
+{
+  "$id": "https://research-engine.local/contract/templates.schema.json",
+  "title": "templates.yaml —— 环境：可执行声明（含 observables）",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "templates"],
+  "properties": {
+    "schemaVersion": { "type": "integer", "const": 3 },
+    "templates": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/template" }
+    }
+  },
+  "$defs": {
+    "template": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "status", "description", "allow", "scriptRef", "paramsSchema", "observables"],
+      "properties": {
+        "version": { "type": "integer", "minimum": 1 },
+        "status": { "type": "string", "enum": ["active", "deprecated"] },
+        "description": { "type": "string" },
+        "allow": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "description": "命令前缀白名单；run_launch 的安全闸依据。"
+        },
+        "scriptRef": { "$ref": "#/$defs/scriptRef" },
+        "args": { "type": "string", "description": "追加参数模板，支持 {{key}}（来自 params）与 {{__raw__}}/{{__runId__}}/{{__project__}} 保留占位。" },
+        "paramsSchema": { "$ref": "#/$defs/paramsSchema" },
+        "observables": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/observable" },
+          "description": "可提取字段声明；run_observe 只能提取这里声明过的字段（防挑数字）。"
+        },
+        "updatedAt": { "type": "string" },
+        "deprecatedAt": { "type": "string" }
+      }
+    },
+    "scriptRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "mode", "path"],
+      "properties": {
+        "name": { "type": "string" },
+        "mode": { "type": "string", "enum": ["create", "adopt"] },
+        "path": { "type": "string", "description": "工程内相对路径。" },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "version": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "paramsSchema": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "const": "object" },
+        "properties": { "type": "object" },
+        "required": { "type": "array", "items": { "type": "string" } },
+        "additionalProperties": { "type": "boolean" }
+      }
+    },
+    "observable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "role", "pattern"],
+      "properties": {
+        "field": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+        "role": { "type": "string", "description": "从 manifest 中哪个角色的产出文件提取。" },
+        "pattern": { "type": "string", "description": "正则；第 1 个捕获组 = 数值。" },
+        "unit": { "type": "string" },
+        "description": { "type": "string" },
+        "kind": { "type": "string", "enum": ["number", "string"] }
+      }
+    }
+  }
+}

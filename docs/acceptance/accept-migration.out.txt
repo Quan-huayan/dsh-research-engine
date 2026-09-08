@@ -1,0 +1,10 @@
+﻿报告已写入 `D:\CCNI\expHarness\accept-migration.report.md`。摘要（≤10 行）：
+
+1. M1 迁移完成（阶段机 5/6、模板 7、12 run 补证据清单、8 条笔记补结构头、旧工程笔记移出）；M2 复检结构校验通过但 verify=dirty。
+2. M3 五个模板 observables 全部补齐（各升 v2）；M4 12 条 run 全部“raw 0”，run_observe 对 done run 两次均拒绝（无已登记产出）。
+3. M5 只有 `conclusion-parameter-parity`（claim+可解析证据）proposed→accepted；3 条 proposal 被 `note_adjudicate` 以“缺少 decision.askCallId”拒绝，4 条停在 proposed。
+4. M6 三种派生视图已渲染；`skills/attndepth/SKILL.md` 内部工具名 0 命中、版本库词汇 0 命中。
+5. M7b/M7c/M7d 通过：产物 88→88、notes 8→8、registry 21→36 行、`.git`=False、旧 skill 已移出且归档存在。
+6. **M7a 失败（未绕过）**：verify 仍 dirty——迁移工具给 12/12 个无产出 run 写的 manifest 多出 `note` 字段，被判 schema 违规；`run_launch`/`run_draft` 都被“verify 无 dirty”前置锁死，无工具可修。
+7. 另发现：`.research/state.json` 等迁移前派生文件未登记（已按 verify 提示 `reconcile mode=ignore` 收编）；`note_adjudicate` 对“有证据的 proposal”只认用户裁决且提示语与事实不符；9 个 entity 的 `source` 全缺。
+8. 报告含：验收总表、9 条异常（只写实测）、迁移前后基线对比表、完整文件变更清单（新增/修改/移动/未改动）。

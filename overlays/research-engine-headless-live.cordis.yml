@@ -1,0 +1,63 @@
+# 临时 overlay（不属于交付物，仅用于 §6.2 现场验收）：
+# 把研究引擎五个插件挂进 headless profile —— headless 不挂 agent-presets roster，
+# 因此 preset 里的 group 行在这里以 --patch overlay 的形式等价复现。
+# 用法（cwd = 目标工程根）：
+#   dsh --profile headless --patch D:\CCNI\expHarness\overlays\research-engine-headless-live.cordis.yml "<task>"
+#
+# 两点机制说明：
+# 1. boot() 把 ctx.baseUrl 设为 profile 根目录，因此 overlay 里的行名不能走相对路径，
+#    改用 file:// URL（loader 的 import(name) 分支直接交给 Node ESM）。
+# 2. 行名带 ?v=8 与 preset 保持一致（Node 按 URL 缓存 ESM，改插件内容需递增 v）。
+#
+# 审批策略：headless 没有交互审批面，ask 会让工具调用悬空/被拒。
+# 新增 live-accept（workspace-write + never），并把它设为默认。
+
+- id: permission
+  config:
+    defaultPreset: live-accept
+    presets:
+      read-only:
+        sandbox: read-only
+        approval: ask
+      workspace-write:
+        sandbox: workspace-write
+        approval: ask
+      danger-full-access:
+        sandbox: danger-full-access
+        approval: never
+      live-accept:
+        sandbox: workspace-write
+        approval: never
+
+- insert:
+    - id: test-answer-provider
+      name: 'file:///D:/CCNI/expHarness/tools/test-answer-provider.mjs?v=2'
+
+    # headless 默认不挂 ask_user_question；验收「用户权威」链路必须有它。
+    - id: tool-ask-user
+      name: '@deepseek-ai/dsh-tool-ask-user'
+
+    - id: research-engine
+      name: cordis:group
+      group: true
+      isolate:
+        research.engineGit: true
+        research.expLedger: true
+        research.stageCtrl: true
+        research.taskDispatch: true
+        research.kbCore: true
+      config:
+        - id: engine-git
+          name: 'file:///D:/CCNI/expHarness/presets/research-engine/plugins/engine-git/main.js?v=8'
+
+        - id: exp-ledger
+          name: 'file:///D:/CCNI/expHarness/presets/research-engine/plugins/exp-ledger/main.js?v=8'
+
+        - id: stage-ctrl
+          name: 'file:///D:/CCNI/expHarness/presets/research-engine/plugins/stage-ctrl/main.js?v=8'
+
+        - id: task-dispatch
+          name: 'file:///D:/CCNI/expHarness/presets/research-engine/plugins/task-dispatch/main.js?v=8'
+
+        - id: kb-core
+          name: 'file:///D:/CCNI/expHarness/presets/research-engine/plugins/kb-core/main.js?v=8'

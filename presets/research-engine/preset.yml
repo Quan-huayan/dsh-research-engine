@@ -1,0 +1,3 @@
+name: 研究引擎
+description: 研究引擎（research-engine）：环境/台账/状态机/执行/知识五层由工具独占，任何结论都能由不可变证据 + 可重放过程重新得到。接新工程只需 project_init。
+order: 10

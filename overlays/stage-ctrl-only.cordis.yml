@@ -1,0 +1,31 @@
+# 临时 overlay（⑥ 验收用）：只挂 stage-ctrl 一份，不挂 exp-ledger/task-dispatch/kb-core ——
+# 证明该插件目录独立可用（read+write 自洽）。
+# 用法（cwd 任意）：
+#   dsh --profile headless --patch D:\CCNI\expHarness\overlays\stage-ctrl-only.cordis.yml "<task>"
+
+- id: permission
+  config:
+    defaultPreset: live-accept
+    presets:
+      read-only:
+        sandbox: read-only
+        approval: ask
+      workspace-write:
+        sandbox: workspace-write
+        approval: ask
+      danger-full-access:
+        sandbox: danger-full-access
+        approval: never
+      live-accept:
+        sandbox: workspace-write
+        approval: never
+
+- insert:
+    - id: stage-ctrl-only
+      name: cordis:group
+      group: true
+      isolate:
+        research.stageCtrl: true
+      config:
+        - id: stage-ctrl-copy
+          name: 'file:///D:/CCNI/expHarness/presets/research-engine/plugins/stage-ctrl/main.js?v=8'
