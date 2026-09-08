@@ -17,7 +17,7 @@
 - `scripts/install.mjs` —— 把 preset 同步进 `$DSH_HOME/.agent-presets/` 的幂等安装器
   （`--force` 先备份、`--dry-run` 只报告、`--dir` 换根）；覆盖 dsh 0.1.1-rc.x 等
   组合包根不生效的版本。
-- `README.md`、`CHANGELOG.md`、`.gitignore`。
+- `README.md`、`CHANGELOG.md`、`.gitignore`、`LICENSE`（MIT）。
 
 ### 变更
 
