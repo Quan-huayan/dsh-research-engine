@@ -1,6 +1,7 @@
 {
   "name": "@quan-huayan/dsh-research-engine",
   "version": "0.1.0",
+  "license": "MIT",
   "description": "研究引擎（research-engine）：把研究工程变成「不可变证据 + 可重放过程」的 DeepSeek Harness agent preset —— 环境/台账/状态机/执行/知识五层由工具独占，21 个模型面工具 + 1 个内建版本库服务。",
   "type": "module",
   "main": "startup.js",
