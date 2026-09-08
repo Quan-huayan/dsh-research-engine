@@ -135,7 +135,7 @@ fixtures/                       测试工程（gitignore，不进包）
 ## 5. 自检
 
 ```sh
-npm run check          # 契约 + 插件静态检查 + 195/197 项工具探针
+npm run check          # 契约 + 插件静态检查 + 197 项工具探针
 npm run check:preset   # 用 dsh 自己的 preset 发现器解析 agent.cordis.yml
 node tools/probe-migrate.mjs   # 迁移自检
 ```
